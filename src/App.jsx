@@ -58,7 +58,7 @@ const STORAGE_KEY = "mlaFormattingLab.v1";
 const correctDate = "15 June 2026";
 const correctLastName = "Mitchell";
 const correctTitle = "Why Revision Matters in College Writing";
-const templateUrl = "https://docs.google.com/document/d/1vzhgYDH3BHDKE64cDlsb85bLlbeOvh3QfnFZtrfO_wg/template/preview";
+const templateUrl = "https://docs.google.com/document/d/1LshgCho0Nkbf8dGjUvEPc0q9DYX9ENUyHAyuMKYrCTE/template/preview";
 
 // All four sides must read "1 inch" for the margins step to pass.
 const correctMargins = { top: "1 inch", bottom: "1 inch", left: "1 inch", right: "1 inch" };
@@ -544,15 +544,18 @@ export default function MLAFormattingLab() {
                 <Sparkles className="h-5 w-5" />
                 <p className="font-bold">Skills you will practice</p>
               </div>
-              <div className="grid gap-2.5">
-                {steps.map((step, index) => (
-                  <div key={step.id} className="flex items-center gap-3 rounded-xl bg-white/5 px-4 py-3 text-sm font-medium ring-1 ring-white/10">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-bold">
-                      {index + 1}
-                    </span>
-                    {step.short}
-                  </div>
-                ))}
+              <div className="grid gap-2">
+                {steps.map((step, index) => {
+                  const stepAccent = ACCENTS[step.accent] ?? ACCENTS.blue;
+                  return (
+                    <div key={step.id} className="flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3 text-sm font-medium text-white ring-1 ring-white/15">
+                      <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${stepAccent.grad} text-xs font-bold text-white`}>
+                        {index + 1}
+                      </span>
+                      {step.short}
+                    </div>
+                  );
+                })}
               </div>
               <p className="mt-6 text-sm text-slate-400">
                 This lab focuses only on MLA page formatting. In-text citations and Works Cited entries are not included in this activity.
