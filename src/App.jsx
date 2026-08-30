@@ -58,7 +58,7 @@ const STORAGE_KEY = "mlaFormattingLab.v1";
 const correctDate = "15 June 2026";
 const correctLastName = "Mitchell";
 const correctTitle = "Why Revision Matters in College Writing";
-const templateUrl = "https://docs.google.com/document/d/1LshgCho0Nkbf8dGjUvEPc0q9DYX9ENUyHAyuMKYrCTE/template/preview";
+const templateUrl = "https://docs.google.com/document/d/1vzhgYDH3BHDKE64cDlsb85bLlbeOvh3QfnFZtrfO_wg/template/preview";
 
 // All four sides must read "1 inch" for the margins step to pass.
 const correctMargins = { top: "1 inch", bottom: "1 inch", left: "1 inch", right: "1 inch" };
