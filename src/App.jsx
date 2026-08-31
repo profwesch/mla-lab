@@ -58,7 +58,19 @@ const STORAGE_KEY = "mlaFormattingLab.v1";
 const correctDate = "15 June 2026";
 const correctLastName = "Mitchell";
 const correctTitle = "Why Revision Matters in College Writing";
-const templateUrl = "https://docs.google.com/document/d/1LshgCho0Nkbf8dGjUvEPc0q9DYX9ENUyHAyuMKYrCTE/template/preview";
+
+// The Apps Script web app (see apps-script-autofill/Code.gs) that copies the
+// MLA essay template, fills in the student's own placeholders (LastName,
+// Type Your Name Here, Type Date Here) from the name and date we pass it,
+// and redirects straight to the finished copy. Instructor name and course
+// name already in the template are never touched by the script.
+const templateAutofillUrl = "https://script.google.com/macros/s/AKfycbx9cASxeEt7pAYp3NAvDasZE_j_spBZaMd9gzJtdxmMKUupNGqOW6Heg9MQxVTbOd54/exec";
+
+const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+function formatMlaDate(date) {
+  return `${date.getDate()} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+}
 
 // All four sides must read "1 inch" for the margins step to pass.
 const correctMargins = { top: "1 inch", bottom: "1 inch", left: "1 inch", right: "1 inch" };
@@ -282,6 +294,10 @@ export default function MLAFormattingLab() {
         return `MLA-${y}${m}${d}-${serial}`;
       })
   );
+  // Captured once, the first time the certificate is reached, so it stays
+  // stable across refreshes (like certificateId) instead of drifting to
+  // "today" on every reload.
+  const [completionDate] = useState(saved?.completionDate ?? (() => formatMlaDate(new Date()))());
   const messageTimer = useRef(null);
 
   const current = steps[stepIndex];
@@ -297,12 +313,12 @@ export default function MLAFormattingLab() {
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ state, stepIndex, started, studentName, showCertificate, certificateId })
+        JSON.stringify({ state, stepIndex, started, studentName, showCertificate, certificateId, completionDate })
       );
     } catch {
       // ignore storage errors
     }
-  }, [state, stepIndex, started, studentName, showCertificate, certificateId]);
+  }, [state, stepIndex, started, studentName, showCertificate, certificateId, completionDate]);
 
   // Warn before closing the tab while the lab is in progress and unfinished.
   useEffect(() => {
@@ -328,6 +344,14 @@ export default function MLAFormattingLab() {
     }),
     [state.font, state.fontSize, state.spacing]
   );
+
+  // Hands the student's own name (from the certificate) and completion date
+  // to the Apps Script bridge, which creates their personal, already-filled
+  // copy of the template. No extra input needed from the student.
+  const templateUrl = useMemo(() => {
+    const params = new URLSearchParams({ name: studentName.trim(), date: completionDate });
+    return `${templateAutofillUrl}?${params.toString()}`;
+  }, [studentName, completionDate]);
 
   const showMessage = (tone, text, autoDismiss = false) => {
     if (messageTimer.current) window.clearTimeout(messageTimer.current);
@@ -615,7 +639,7 @@ export default function MLAFormattingLab() {
                   <li>Download your MLA Formatting Lab Completion Certificate.</li>
                   <li>Upload the certificate only to the MLA Formatting Lab assignment link in Blackboard for participation credit.</li>
                   <li>
-                    Open the MLA Essay Template and click the blue <strong>Use Template</strong> button on the right side of the screen.
+                    Open the MLA Essay Template — it opens your own copy, already filled in with your name and today's date.
                   </li>
                 </ol>
               </div>
@@ -643,12 +667,12 @@ export default function MLAFormattingLab() {
               >
                 Open MLA Essay Template
               </a>
-              {templateOpened && <p className="mt-2 text-sm font-semibold text-emerald-700">Template opened. Click the blue Use Template button in Google Docs.</p>}
+              {templateOpened && <p className="mt-2 text-sm font-semibold text-emerald-700">Opening your personal copy — it may take a few seconds.</p>}
               <a href={templateUrl} target="_blank" rel="noreferrer" className="mt-2 block text-sm font-semibold text-blue-700 underline">
                 Template link not opening? Click here.
               </a>
               <p className="mt-3 text-left text-sm text-slate-600">
-                After the template opens, click the blue <strong>Use Template</strong> button. Replace LastName, Type Your Name Here, Type Date Here, and Type Your Title Here before writing your essay.
+                Your copy already has your name and today's date filled in. Just replace <strong>Type Your Title Here</strong> with your essay title and start writing.
               </p>
             </div>
 
