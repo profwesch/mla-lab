@@ -138,13 +138,13 @@ const steps = [
     short: "Spacing",
     accent: "blue",
     goal: "Spread the lines farther apart.",
-    doThis: ["Click the Line Spacing button beside the alignment buttons.", "Select Double."],
+    doThis: ["Click the Line Spacing button beside the alignment buttons.", "Select 2.0."],
     why: "MLA papers are double spaced from the heading through the final paragraph. Do not press Enter extra times to create space before or after the title.",
     success: "Great job! You changed the paper to double spacing.",
     hint: "The Line Spacing button has lines with up and down arrows and sits beside the alignment buttons.",
-    showMe: "Line Spacing button → Double",
-    check: (state) => state.spacing === "Double",
-    solve: { spacing: "Double" },
+    showMe: "Line Spacing button → 2.0",
+    check: (state) => state.spacing === "2.0",
+    solve: { spacing: "2.0" },
   },
   {
     id: "headingDate",
@@ -340,7 +340,7 @@ export default function MLAFormattingLab() {
     () => ({
       fontFamily: state.font === "Times New Roman" ? "'Times New Roman', Times, serif" : "Arial, sans-serif",
       fontSize: state.fontSize === "12" ? "12pt" : "11pt",
-      lineHeight: state.spacing === "Double" ? "2" : "1.25",
+      lineHeight: state.spacing === "2.0" ? "2" : "1.25",
     }),
     [state.font, state.fontSize, state.spacing]
   );
@@ -878,7 +878,7 @@ export default function MLAFormattingLab() {
             </button>
             {openMenu === "lineSpacing" && (
               <div className="absolute z-30 mt-1 w-36 rounded-lg border bg-white p-1 shadow-xl">
-                {["Single", "1.15", "1.5", "Double"].map((option) => (
+                {["Single", "1.15", "1.5", "2.0"].map((option) => (
                   <button key={option} type="button" onClick={() => completeStepAction("spacing", { spacing: option })} className="w-full rounded px-3 py-2 text-left hover:bg-blue-50">
                     {option}
                   </button>
