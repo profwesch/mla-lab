@@ -47,7 +47,7 @@ function doGet(e) {
     }
   }
 
-  // Every attempt failed — most likely a transient Google-side issue rather
+  // Every attempt failed. Most likely a transient Google-side issue rather
   // than anything wrong with the template. Show a plain, friendly page with
   // a retry link instead of leaving the student looking at a raw error.
   return HtmlService.createHtmlOutput(
@@ -81,7 +81,7 @@ function createFilledCopy(fullName, dateText) {
   }
 
   // The running header (Last Name + page number) usually lives in the page
-  // header, not the body — replace it there too if present.
+  // header, not the body. Replace it there too if present.
   try {
     var header = doc.getHeader();
     if (header) {
@@ -95,7 +95,7 @@ function createFilledCopy(fullName, dateText) {
 
   // The lab doesn't collect student email addresses, so each personal copy
   // is shared as "anyone with the link can edit." Only that one copy is
-  // exposed if the link leaks — not the master template.
+  // exposed if the link leaks, not the master template.
   copy.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.EDIT);
 
   return copy.getUrl();
